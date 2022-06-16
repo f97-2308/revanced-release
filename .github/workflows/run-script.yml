@@ -1,0 +1,37 @@
+
+name: Run Script
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-from-prebuilt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Download youtube.apk
+        run: |
+          mkdir "build"
+          cd "build"
+          wget -q "https://github.com/bot-lnvs/revanced-cli-script/releases/download/17.23.35/youtube.apk"
+          cd ..
+      
+      - name: Execute build-from-prebuilt.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: |
+          chmod +x ./build-from-prebuilt.sh
+          ./build-from-prebuilt.sh
+
+      - name: Push revanced.apk to github
+        run:  |
+          git config --global user.name 'f97' 
+          git config --global user.email 'admin@f97.xyz'
+          git lfs track revanced.apk
+          git add revanced.apk
+          git commit -m '⬆️ add revanced.apk'
+          git push -f
