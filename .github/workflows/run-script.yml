@@ -3,6 +3,10 @@ name: Run Script
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - '*'
+      - '**'
 
 jobs:
   build-from-prebuilt:
@@ -13,10 +17,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
       - name: Download youtube.apk
+        env: 
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
         run: |
           mkdir "build"
-          wget "https://github.com/f97/revanced-release/releases/download/youtube/com.google.android.youtube_17.22.36-1529734592_minAPI23.arm64-v8a.armeabi-v7a.x86.x86_64.nodpi._apkmirror.com.apk" -O build/youtube.apk
+          wget "https://github.com/f97/revanced-release/releases/download/youtube/com.google.android.youtube_${VERSION}.apk" -O build/youtube.apk
       
       - name: Execute build-from-prebuilt.sh
         env:
@@ -33,7 +43,7 @@ jobs:
       #     git add revanced.apk
       #     git commit -m '⬆️ add revanced.apk'
       #     git push -f
-
+      
       - name: Upload revanced.apk to release
         uses: xresloader/upload-to-github-release@v1
         env:
