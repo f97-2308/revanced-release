@@ -16,9 +16,7 @@ jobs:
       - name: Download youtube.apk
         run: |
           mkdir "build"
-          cd "build"
-          wget -q "https://github.com/bot-lnvs/revanced-cli-script/releases/download/17.23.35/youtube.apk"
-          cd ..
+          wget "https://github.com/f97/revanced-release/releases/download/youtube/com.google.android.youtube_17.22.36-1529734592_minAPI23.arm64-v8a.armeabi-v7a.x86.x86_64.nodpi._apkmirror.com.apk" -o build/youtube.apk
       
       - name: Execute build-from-prebuilt.sh
         env:
@@ -27,11 +25,18 @@ jobs:
           chmod +x ./build-from-prebuilt.sh
           ./build-from-prebuilt.sh
 
-      - name: Push revanced.apk to github
-        run:  |
-          git config --global user.name 'f97' 
-          git config --global user.email 'admin@f97.xyz'
-          git lfs track revanced.apk
-          git add revanced.apk
-          git commit -m '⬆️ add revanced.apk'
-          git push -f
+      # - name: Push revanced.apk to github
+      #   run:  |
+      #     git config --global user.name 'f97' 
+      #     git config --global user.email 'admin@f97.xyz'
+      #     git lfs track revanced.apk
+      #     git add revanced.apk
+      #     git commit -m '⬆️ add revanced.apk'
+      #     git push -f
+
+      - name: Upload revanced.apk to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: revanced.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
