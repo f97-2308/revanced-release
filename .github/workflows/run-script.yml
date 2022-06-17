@@ -16,7 +16,7 @@ jobs:
       - name: Download youtube.apk
         run: |
           mkdir "build"
-          wget "https://github.com/f97/revanced-release/releases/download/youtube/com.google.android.youtube_17.22.36-1529734592_minAPI23.arm64-v8a.armeabi-v7a.x86.x86_64.nodpi._apkmirror.com.apk" -o build/youtube.apk
+          wget "https://github.com/f97/revanced-release/releases/download/youtube/com.google.android.youtube_17.22.36-1529734592_minAPI23.arm64-v8a.armeabi-v7a.x86.x86_64.nodpi._apkmirror.com.apk" -O build/youtube.apk
       
       - name: Execute build-from-prebuilt.sh
         env:
