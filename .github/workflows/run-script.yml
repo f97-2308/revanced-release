@@ -35,8 +35,10 @@ jobs:
       #     git push -f
 
       - name: Upload revanced.apk to release
-        uses: JasonEtco/upload-to-release@master
-        with:
-          args: revanced.apk
+        uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        with:
+          file: "revanced.apk"
+          tags: true
+          draft: true
